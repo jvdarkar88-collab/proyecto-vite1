@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    background-color: #f2f5f8;
+    color: #222;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.6;
+}

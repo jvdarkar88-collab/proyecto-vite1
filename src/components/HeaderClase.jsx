@@ -1,8 +1,11 @@
 import React from 'react';
+import { motion } from 'framer-motion'; // ➕ NUEVO
+import { aparecer } from '../animaciones'; // ➕ NUEVO
 
 function HeaderClase({ tituloTema, nombreDocente, horario }) {
     return (
-        <header style={{
+        // ➕ header -> motion.header: entra con la secuencia del padre (variants)
+        <motion.header variants={aparecer} style={{
             background: 'linear-gradient(135deg, #002b49 0%, #0f4c81 100%)',
             color: 'white',
             padding: '25px',
@@ -19,7 +22,7 @@ function HeaderClase({ tituloTema, nombreDocente, horario }) {
                 <span>👨‍🏫 Docente: <strong>{nombreDocente}</strong></span>
                 <span>⏰ Horario: <strong>{horario}</strong></span>
             </div>
-        </header>
+        </motion.header>
     );
 }
 

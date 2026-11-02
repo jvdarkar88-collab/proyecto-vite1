@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion'; // ➕ NUEVO
+import { aparecer, elevar } from '../animaciones'; // ➕ NUEVO
 
 function ActividadItem({ titulo, tiempo, tipo }) {
     // Hook useState para alternar entre pendiente y completada
@@ -9,17 +11,23 @@ function ActividadItem({ titulo, tiempo, tipo }) {
     };
 
     return (
-        <div style={{ 
-            border: completada ? '1px solid #38ef7d' : '1px solid #cbd5e1', 
-            padding: '15px', 
-            borderRadius: '8px', 
-            marginBottom: '10px', 
-            background: completada ? '#e6fffa' : '#f8fafc',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            transition: 'all 0.3s ease'
-        }}>
+        // ➕ div -> motion.div: entra con la secuencia del padre (variants) y se eleva (whileHover)
+        <motion.div
+            variants={aparecer}
+            whileHover={elevar}
+            style={{ 
+                border: completada ? '1px solid #38ef7d' : '1px solid #cbd5e1', 
+                padding: '15px', 
+                borderRadius: '8px', 
+                marginBottom: '10px', 
+                background: completada ? '#e6fffa' : '#f8fafc',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                // ✏️ CAMBIO: antes era 'all 0.3s ease'. 'all' incluye transform y competiría con Motion
+                transition: 'background-color 0.3s ease, border-color 0.3s ease'
+            }}
+        >
             <div>
                 <span style={{ background: '#0ea5e9', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8em' }}>{tipo}</span>
                 <h4 style={{ 
@@ -32,7 +40,9 @@ function ActividadItem({ titulo, tiempo, tipo }) {
                 <p style={{ margin: 0, fontSize: '0.85em', color: '#64748b' }}>⏱️ Duración: {tiempo}</p>
             </div>
 
-            <button
+            {/* ➕ button -> motion.button: whileTap da respuesta al toque */}
+            <motion.button
+                whileTap={{ scale: 0.95 }}
                 onClick={alternarEstado}
                 style={{
                     backgroundColor: completada ? '#38ef7d' : '#e2e8f0',
@@ -43,12 +53,25 @@ function ActividadItem({ titulo, tiempo, tipo }) {
                     cursor: 'pointer',
                     fontWeight: 'bold',
                     fontSize: '0.85em',
-                    transition: 'all 0.2s ease'
+                    // ✏️ CAMBIO: antes era 'all 0.2s ease' (mismo motivo: no competir con el transform de whileTap)
+                    transition: 'background-color 0.2s ease, color 0.2s ease'
                 }}
             >
-                {completada ? '✅ Completada' : '⏳ Pendiente'}
-            </button>
-        </div>
+                {/* ➕ El texto sale y entra al cambiar de estado. La clave (key) le dice a AnimatePresence que es otro elemento */}
+                <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                        key={completada ? 'completada' : 'pendiente'}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.1 }}
+                        style={{ display: 'inline-block' }} // necesario: los transform no se aplican a elementos inline
+                    >
+                        {completada ? '✅ Completada' : '⏳ Pendiente'}
+                    </motion.span>
+                </AnimatePresence>
+            </motion.button>
+        </motion.div>
     );
 }
 

@@ -3,7 +3,7 @@ import { motion, AnimatePresence, MotionConfig } from 'framer-motion'; // ➕ NU
 import './App.css';
 import HeaderClase from './components/HeaderClase';
 import ObjetivosCard from './components/ObjetivosCard';
-import ActividadItem from './components/ActividadItem';
+import ListaActividades from './components/ListaActividades'; // ✏️ antes: import ActividadItem (ahora la lista se arma con datos de NocoDB)
 import { orquesta, aparecer, seccion } from './animaciones'; // ➕ NUEVO: variantes compartidas
 
 function App() {
@@ -70,27 +70,8 @@ function App() {
                     <h3 style={{ color: '#002b49', fontSize: '20px', borderBottom: '2px solid #e2e8f0', paddingBottom: '8px' }}>
                         📋 Secuencia de Actividades
                     </h3>
-                    
-                    <ActividadItem 
-                        titulo="Trivia Rápida Interactiva sobre JSX" 
-                        tiempo="10 minutos" 
-                        tipo="Diagnóstica" 
-                    />
-                    <ActividadItem 
-                        titulo="Taller Guiado: Creación y Desestructuración de Props" 
-                        tiempo="30 minutos" 
-                        tipo="Construcción" 
-                    />
-                    <ActividadItem 
-                        titulo="Laboratorio Práctico con Hook useState" 
-                        tiempo="35 minutos" 
-                        tipo="Aplicación" 
-                    />
-                    <ActividadItem 
-                        titulo="Cierre e Intercambio de Código" 
-                        tiempo="15 minutos" 
-                        tipo="Evaluación" 
-                    />
+                    {/* ✏️ Antes: 4 <ActividadItem> escritos a mano. Ahora se cargan desde NocoDB con fetch + useEffect */}
+                    <ListaActividades />
                 </motion.section>
             </motion.div>
         </MotionConfig>
